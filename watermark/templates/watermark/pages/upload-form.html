@@ -1,0 +1,24 @@
+{% extends 'global/base.html' %}
+
+{% block title %} watermark {% endblock title %}
+
+{% block content %}
+
+<div class="container pt-5">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 d-flex flex-row justify-content-center">
+            <div class="img-file">
+                <label for="imageFile" class="form-label">Image</label>
+                <input type="file" class="form-control" id="imageFile" name="img">
+            </div>
+            <div class="logo-file" style="margin-left: 20px;">
+                <label for="fileLogo" class="form-label">Logo</label>
+                <input type="file" class="form-control" id="logoFile" name="logo">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success" id="center-button">Submit</button>
+    </form>
+</div>
+
+{% endblock content %}
