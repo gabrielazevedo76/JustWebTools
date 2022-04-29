@@ -1,0 +1,24 @@
+{% extends 'global/base.html' %}
+
+{% block title %} watermark {% endblock title %}
+
+{% block content %}
+
+<div class="container pt-5">
+    <form method="POST" class="d-flex flex-column align-items-center">
+        {% csrf_token %}
+        <div class="mb-3" style="max-width: 50%;">
+            <label for="position" class="form-label">Watermark Position</label>
+            <select id="position" class="form-select" name="position">
+                <option value="UpperLeft">UpperLeft</option>
+                <option value="UpperRight">UpperRight</option>
+                <option value="Center">Center</option>
+                <option value="LowerLeft">LowerLeft</option>
+                <option value="LowerRight">LowerRight</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Merge</button>
+    </form>
+</div>
+
+{% endblock content %}

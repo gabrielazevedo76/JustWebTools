@@ -23,14 +23,35 @@ def uploadForm(request):
         form = WatermarkForm()
         return render(request, 'watermark/pages/upload-form.html', {"form":form})
 
-def download(request, pk):
+def handleForm(request, pk):
+        wmModel = WatermarkModel.objects.get(id=pk)
+        wm = Watermark(wmModel.img, wmModel.logo)
+
+        if request.method == "POST":
+            res = request.POST.get('position')
+            if res == "UpperLeft":
+                return HttpResponseRedirect(f"^{pk}^width={0}&height={0}/download")
+            if res == "UpperRight":
+                return HttpResponseRedirect(f"^{pk}^width={wm.widthImg - 125}&height={0}/download")
+            if res == "Center":
+                return HttpResponseRedirect(f"^{pk}^width={(wm.widthImg - 125) // 2}&height={(wm.heightImg - 125) // 2}/download")
+            if res == "LowerLeft":
+                return HttpResponseRedirect(f"^{pk}^width={0}&height={wm.heightImg - 125}/download")
+            if res == "LowerRight":
+                return HttpResponseRedirect(f"^{pk}^width={wm.widthImg - 125}&height={wm.heightImg - 125}/download")
+        else:
+            return render(request, 'watermark/pages/handle-form.html', {"wm":wm})
+
+
+
+def download(request, pk, width, height):
     if request.method == "GET":
         wmModel = WatermarkModel.objects.get(id=pk)
         wmPath = f"media/watermark/media/watermarked/{wmModel.pk}.png"
 
         wm = Watermark(wmModel.img, wmModel.logo)
         wm.resize(0.4)
-        im = wm.merge(wmModel.width, wmModel.height)
+        im = wm.merge(width, height)
         im.save(wmPath)
         wmModel.watermarked = wmPath
         wmModel.save()
